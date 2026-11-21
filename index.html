@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ثبت‌نام مشکات – دانشگاه آزاد تهران شرق</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f6fb;--card:#fff;--text:#1b2233;--muted:#68728a;--accent:#2457d6;--ok:#14a05a;--line:#e1e6f0;--lock:#aab2c5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#192032;--text:#e8ecf6;--muted:#97a1b9;--accent:#6f9bff;--ok:#38c783;--line:#2a3350;--lock:#566080}}
+:root[data-theme="dark"]{--bg:#0f1420;--card:#192032;--text:#e8ecf6;--muted:#97a1b9;--accent:#6f9bff;--ok:#38c783;--line:#2a3350;--lock:#566080}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.8}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+header{text-align:center;margin-bottom:20px}
+header h1{font-size:1.5rem;margin:6px 0;font-weight:800}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;padding:2px 14px;font-size:.9rem;font-weight:600}
+header p{color:var(--muted);margin:6px 0 0}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:18px 0 6px}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .4s}
+.pct{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;transition:opacity .2s}
+.step.locked{opacity:.55}
+.head{display:flex;gap:12px;align-items:center}
+.num{flex:none;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
+.step.done .num{background:var(--ok)}
+.step.locked .num{background:var(--lock)}
+.head h2{font-size:1.05rem;margin:0}
+.step p{margin:8px 0 12px;color:var(--muted);font-size:.95rem}
+.url{direction:ltr;text-align:left;font-size:.82rem;background:var(--bg);border-radius:8px;padding:6px 10px;margin-bottom:12px;overflow-x:auto;white-space:nowrap}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+a.btn,button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;text-decoration:none;display:inline-block}
+a.btn{background:var(--accent);color:#fff}
+button.ok{background:transparent;color:var(--ok);border:1.5px solid var(--ok)}
+button.copy{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.step.locked a.btn{pointer-events:none;background:var(--lock)}
+.step.locked button{pointer-events:none;opacity:.5}
+.step.done button.ok{background:var(--ok);color:#fff}
+.final{display:none;text-align:center;background:var(--ok);color:#fff;border-radius:16px;padding:16px;font-weight:700}
+.final.show{display:block}
+.reset{display:block;margin:20px auto 0;background:none;color:var(--muted);font-size:.85rem;text-decoration:underline}
+footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">🎓 دانشگاه آزاد تهران شرق</div>
+    <h1>راهنمای ورود و ثبت‌نام در مشکات</h1>
+    <p>این لینک‌ها مخصوص دانشجویان دانشگاه آزاد تهران شرق است. مراحل را به ترتیب انجام دهید.</p>
+  </header>
+
+  <div class="bar"><i id="fill"></i></div>
+  <div class="pct" id="pct"></div>
+
+  <div id="steps"></div>
+
+  <div class="final" id="final">🎉 همه مراحل انجام شد. موفق باشید!</div>
+  <button class="reset" id="reset">شروع دوباره</button>
+  <footer>لینک‌ها در تب جدید باز می‌شوند، چون سایت مشکات اجازهٔ نمایش داخل صفحهٔ دیگر را نمی‌دهد.</footer>
+</div>
+
+<script>
+const STEPS=[
+ {t:"ورود به مشکات",d:"ابتدا با شمارهٔ موبایل خود وارد شوید یا ثبت‌نام کنید.",u:"https://meshkat.iau.ir/auth/LoginRegisterWithMobile",b:"ورود با موبایل"},
+ {t:"ثبت‌نام در دورهٔ اول",d:"بعد از ورود، این لینک را باز کنید و ثبت‌نام کنید.",u:"https://meshkat.iau.ir/c/32561",b:"باز کردن دورهٔ اول"},
+ {t:"ثبت‌نام در دورهٔ دوم",d:"در پایان، لینک دوم را باز کنید و ثبت‌نام را کامل کنید.",u:"https://meshkat.iau.ir/c/32116",b:"باز کردن دورهٔ دوم"}
+];
+const KEY="meshkat-progress";
+let done=[false,false,false];
+try{const s=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(s)&&s.length===3)done=s.map(Boolean)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}};
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const box=document.getElementById("steps");
+
+function render(){
+  box.innerHTML="";
+  STEPS.forEach((s,i)=>{
+    const locked=i>0&&!done[i-1]&&!done[i];
+    const el=document.createElement("section");
+    el.className="step"+(done[i]?" done":"")+(locked?" locked":"");
+    el.innerHTML=`<div class="head"><div class="num">${done[i]?"✓":fa(i+1)}</div><h2>${s.t}</h2></div>
+      <p>${s.d}${locked?" (ابتدا مرحلهٔ قبل را تمام کنید)":""}</p>
+      <div class="url">${s.u}</div>
+      <div class="row">
+        <a class="btn" href="${s.u}" target="_blank" rel="noopener noreferrer">${s.b}</a>
+        <button class="copy" data-c="${i}">کپی لینک</button>
+        <button class="ok" data-d="${i}">${done[i]?"انجام شد ✓":"انجام دادم"}</button>
+      </div>`;
+    box.appendChild(el);
+  });
+  const n=done.filter(Boolean).length;
+  document.getElementById("fill").style.width=(n/3*100)+"%";
+  document.getElementById("pct").textContent=fa(n)+" از ۳ مرحله انجام شده";
+  document.getElementById("final").classList.toggle("show",n===3);
+}
+box.addEventListener("click",e=>{
+  const d=e.target.dataset;
+  if(d.d!==undefined){const i=+d.d;done[i]=!done[i];if(!done[i])for(let j=i+1;j<3;j++)done[j]=false;save();render()}
+  if(d.c!==undefined){
+    const u=STEPS[+d.c].u,b=e.target;
+    (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{b.textContent="کپی شد ✓"}).catch(()=>{b.textContent="کپی نشد"});
+    setTimeout(()=>{b.textContent="کپی لینک"},1500);
+  }
+});
+document.getElementById("reset").onclick=()=>{done=[false,false,false];save();render()};
+render();
+</script>
+</body>
+</html>
