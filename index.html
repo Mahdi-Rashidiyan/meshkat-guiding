@@ -65,11 +65,11 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:24px}
 <script>
 const STEPS=[
  {t:"ورود به مشکات",d:"ابتدا با شمارهٔ موبایل خود وارد شوید یا ثبت‌نام کنید.",u:"https://meshkat.iau.ir/auth/LoginRegisterWithMobile",b:"ورود با موبایل"},
- {t:"ثبت‌نام در دورهٔ اول",d:"بعد از ورود، این لینک را باز کنید و ثبت‌نام کنید.",u:"https://meshkat.iau.ir/c/33672",b:"باز کردن دورهٔ اول"},
- 
+ {t:"ثبت‌نام در دوره",d:"بعد از ورود، این لینک را باز کنید و در دوره ثبت‌نام کنید.",u:"https://meshkat.iau.ir/c/33672",b:"باز کردن دوره"}
+];
 const KEY="meshkat-progress";
-let done=[false,false,false];
-try{const s=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(s)&&s.length===3)done=s.map(Boolean)}catch(e){}
+let done=[false,false];
+try{const s=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(s)&&s.length===2)done=s.map(Boolean)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}};
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const box=document.getElementById("steps");
@@ -91,20 +91,20 @@ function render(){
     box.appendChild(el);
   });
   const n=done.filter(Boolean).length;
-  document.getElementById("fill").style.width=(n/3*100)+"%";
-  document.getElementById("pct").textContent=fa(n)+" از ۳ مرحله انجام شده";
-  document.getElementById("final").classList.toggle("show",n===3);
+  document.getElementById("fill").style.width=(n/2*100)+"%";
+  document.getElementById("pct").textContent=fa(n)+" از ۲ مرحله انجام شده";
+  document.getElementById("final").classList.toggle("show",n===2);
 }
 box.addEventListener("click",e=>{
   const d=e.target.dataset;
-  if(d.d!==undefined){const i=+d.d;done[i]=!done[i];if(!done[i])for(let j=i+1;j<3;j++)done[j]=false;save();render()}
+  if(d.d!==undefined){const i=+d.d;done[i]=!done[i];if(!done[i])for(let j=i+1;j<2;j++)done[j]=false;save();render()}
   if(d.c!==undefined){
     const u=STEPS[+d.c].u,b=e.target;
     (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{b.textContent="کپی شد ✓"}).catch(()=>{b.textContent="کپی نشد"});
     setTimeout(()=>{b.textContent="کپی لینک"},1500);
   }
 });
-document.getElementById("reset").onclick=()=>{done=[false,false,false];save();render()};
+document.getElementById("reset").onclick=()=>{done=[false,false];save();render()};
 render();
 </script>
 </body>
