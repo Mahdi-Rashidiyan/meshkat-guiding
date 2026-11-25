@@ -65,9 +65,8 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:24px}
 <script>
 const STEPS=[
  {t:"ورود به مشکات",d:"ابتدا با شمارهٔ موبایل خود وارد شوید یا ثبت‌نام کنید.",u:"https://meshkat.iau.ir/auth/LoginRegisterWithMobile",b:"ورود با موبایل"},
- {t:"ثبت‌نام در دورهٔ اول",d:"بعد از ورود، این لینک را باز کنید و ثبت‌نام کنید.",u:"https://meshkat.iau.ir/c/32561",b:"باز کردن دورهٔ اول"},
- {t:"ثبت‌نام در دورهٔ دوم",d:"در پایان، لینک دوم را باز کنید و ثبت‌نام را کامل کنید.",u:"https://meshkat.iau.ir/c/32116",b:"باز کردن دورهٔ دوم"}
-];
+ {t:"ثبت‌نام در دورهٔ اول",d:"بعد از ورود، این لینک را باز کنید و ثبت‌نام کنید.",u:"https://meshkat.iau.ir/c/33672",b:"باز کردن دورهٔ اول"},
+ 
 const KEY="meshkat-progress";
 let done=[false,false,false];
 try{const s=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(s)&&s.length===3)done=s.map(Boolean)}catch(e){}
